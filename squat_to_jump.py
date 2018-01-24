@@ -1,5 +1,6 @@
 """Use OpenCV and face_recognition to capture squat depth, and send press time to Android phone.
 Also used speech_recognition to start Wechat Jump game."""
+import argparse
 import os
 import threading
 import time
@@ -11,6 +12,7 @@ import speech_recognition as sr
 
 __author__ = 'Guangtu Liu'
 __email__ = 'lgt.1001-@163.com'
+__version__ = '0.1.1'
 
 
 def search_image(target, source, threshold=0.8):
@@ -182,7 +184,7 @@ class WechatJump(object):
 
     INTERVAL = 2.0
 
-    def __init__(self, video):
+    def __init__(self, video, use_sphinx=False):
         """Init.
 
         :param cv2.VideoCapture video:  VideoCapture object.
@@ -201,6 +203,8 @@ class WechatJump(object):
         self._relation = None
         self._capture_started = False
 
+        self.recognize_method = self.voice.recognize_sphinx if use_sphinx else self.voice.recognize_google
+        
     @property
     def status(self):
         """Get status. NOT_READY, READY or IS_SET.
@@ -242,16 +246,16 @@ class WechatJump(object):
                 audio = self.voice.listen(source, phrase_time_limit=5)
             try:
                 print('Analyzing...')
-                msg = self.voice.recognize_google(audio)
+                msg = self.recognize_method(audio)
                 print('Analyzed:', msg)
                 if 'ready' in msg:
                     print('Set ready')
                     self.status = self.READY
                     return
             except sr.UnknownValueError:
-                print("Could not understand audio")
+                print('Could not understand your voice')
             except sr.RequestError as e:
-                print("Error; {0}".format(e))
+                print('Error; %s' % e)
                 raise e
             time.sleep(0.1)
 
@@ -285,7 +289,7 @@ class WechatJump(object):
             self.game.start_game()
             self.status = self.IS_SET
         elif self.status == self.IS_SET and not self.is_jumping:
-            self.motion.alter(image, 'Start squating...')
+            self.motion.alter(image, 'Start squatting...')
             if self._process:
                 if self.motion.capture_depth(image):
                     self.is_jumping = True
@@ -295,13 +299,17 @@ class WechatJump(object):
         cv2.imshow('Video', image)
 
 
-video_capture = cv2.VideoCapture(0)
-my_jump = WechatJump(video_capture)
-try:
-    while True:
-        my_jump.run()
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-finally:
-    video_capture.release()
-    cv2.destroyAllWindows()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--sphinx', action='store_true', help='Use sphinx to recognize your voice.', default=False)
+    args = parser.parse_args()
+    video_capture = cv2.VideoCapture(0)
+    my_jump = WechatJump(video_capture, args.sphinx)
+    try:
+        while True:
+            my_jump.run()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    finally:
+        video_capture.release()
+        cv2.destroyAllWindows()
