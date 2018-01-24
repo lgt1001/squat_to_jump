@@ -4,12 +4,12 @@ This project is using speech_recognition to control and start Wechat Jump game, 
 
 # Requirements
 - Python 3.6
-- [numpy (1.13.3) (https://pypi.python.org/pypi/numpy/)]
-- [opencv-python (3.3.0.10) (https://pypi.python.org/pypi/opencv-python/)]
-- [face-recognition (1.0.0) (https://pypi.python.org/pypi/face_recognition/)]
-- [SpeechRecognition (3.8.1) (https://pypi.python.org/pypi/SpeechRecognition/)]
+- [numpy (1.13.3)](https://pypi.python.org/pypi/numpy/)
+- [opencv-python (3.3.0.10)](https://pypi.python.org/pypi/opencv-python/)
+- [face-recognition (1.0.0)](https://pypi.python.org/pypi/face_recognition/)
+- [SpeechRecognition (3.8.1)](https://pypi.python.org/pypi/SpeechRecognition/)
 
-- [Adb tools(https://developer.android.com/studio/releases/platform-tools.html#download)]
+- [Adb tools](https://developer.android.com/studio/releases/platform-tools.html#download)
 - Android Phone
 
 
@@ -30,6 +30,6 @@ if you are using CMU Sphinx (works offline), you can start with:
 
 
 # Links in Github
-- [opencv-python(https://github.com/skvark/opencv-python)]
-- [face_recognition(https://github.com/ageitgey/face_recognition)]
-- [SpeechRecognition(https://github.com/Uberi/speech_recognition)]
+- [opencv-python](https://github.com/skvark/opencv-python)
+- [face_recognition](https://github.com/ageitgey/face_recognition)
+- [SpeechRecognition](https://github.com/Uberi/speech_recognition)
